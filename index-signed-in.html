@@ -1,0 +1,378 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Art Expo - Signed In</title>
+    <style>
+        /* Basic Reset and Body Styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            color: #333;
+            display: flex;
+            flex-direction: column;
+        }
+
+        /* Navbar Styling */
+        .navbar {
+            background-color: #333;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 15px;
+            color: white;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 10;
+        }
+
+        .navbar .logo {
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .navbar .nav-links {
+            display: flex;
+            list-style: none;
+        }
+
+        .navbar .nav-links li {
+            margin: 0 20px;
+        }
+
+        .navbar .nav-links a {
+            text-decoration: none;
+            color: white;
+            font-size: 18px;
+            cursor: pointer;
+        }
+
+        /* Hamburger Menu for Mobile */
+        .hamburger {
+            display: none;
+            flex-direction: column;
+            cursor: pointer;
+        }
+
+        .hamburger div {
+            width: 25px;
+            height: 3px;
+            background-color: white;
+            margin: 4px;
+        }
+
+        /* Responsive Navbar Design */
+        @media (max-width: 768px) {
+            .nav-links {
+                display: none;
+                position: absolute;
+                top: 60px;
+                left: 0;
+                background-color: #333;
+                width: 100%;
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .nav-links.active {
+                display: flex;
+            }
+
+            .navbar .hamburger {
+                display: flex;
+            }
+
+            .navbar .logo {
+                position: absolute;
+                left: 50%;
+                transform: translateX(-50%);
+            }
+        }
+        /* General Section Styling */
+        .section {
+            display: flex;
+            justify-content: center;
+            height: 100vh;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .section .content-box {
+            position: absolute;
+            top: 23%;
+            /* Adjusted vertical positioning */
+            left: 50%;
+            transform: translateX(-50%) translateY(50px);
+            /* Initial position before animation */
+            opacity: 0;
+            transition: all 2s ease-out;
+            /* Animation duration */
+            text-align: center;
+            color: white;
+        }
+
+        .section h1 {
+            font-size: 48px;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+
+        .section p {
+            font-size: 20px;
+            font-style: italic;
+        }
+
+        /* Image Backgrounds */
+        .section.bg1 {
+            background: url('https://via.placeholder.com/1200x800') no-repeat center center/cover;
+        }
+
+        .section.bg2 {
+            background: url('https://via.placeholder.com/1200x800') no-repeat center center/cover;
+        }
+
+        .section.bg3 {
+            background: url('https://via.placeholder.com/1200x800') no-repeat center center/cover;
+        }
+
+        /* Slide-up Animation (when in view) */
+        .section.in-view .content-box {
+            transform: translateX(-50%) translateY(0);
+            /* Final position after animation */
+            opacity: 1;
+        }
+
+        /* Button Styling */
+        .section-button {
+            position: relative;
+            display: inline-block;
+            padding: 10px 20px;
+            font-size: 16px;
+            font-weight: bold;
+            color: white;
+            background-color: black;
+            border: 2px solid transparent;
+            /* Add border for initial state */
+            border-radius: 5px;
+            text-decoration: none;
+            text-align: center;
+            cursor: pointer;
+            transition: background-color 0.3s, border-color 0.3s;
+            /* Transition for button */
+        }
+
+        .section-button::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background-image: conic-gradient(#ff4545, #00ff99, #006aff, #ff0095, #ff4545);
+            /* Rainbow border */
+            border-radius: inherit;
+            /* Match the button’s border-radius */
+            z-index: -1;
+            /* Place it behind the button text */
+            transition: background-image 0.5s, transform 0.3s;
+            /* Transition for pseudo-element */
+            transform: scale(1);
+            /* Slightly larger than the button to ensure it’s visible */
+        }
+
+        .section-button:hover {
+            background-color: transparent;
+            /* Ensure the background is transparent on hover */
+            border-color: transparent;
+            /* Hide border on hover */
+        }
+
+        .section-button:hover::after {
+            background-image: conic-gradient(#ff4545, #00ff99, #006aff, #ff0095, #ff4545);
+            /* Maintain rainbow effect on hover */
+            transform: scale(1.1);
+            /* Scale up on hover for the pseudo-element */
+        }
+
+        /* Footer Styling */
+        footer {
+            background-color: #333;
+            color: white;
+            text-align: center;
+            padding: 10px 0;
+            margin-top: auto;
+        }
+
+        /* Body Styling */
+        .content {
+            flex: 1;
+            padding-top: 120px;
+            overflow: scroll;
+            /* Offset for fixed navbar */
+        }
+    </style>
+</head>
+
+<body>
+
+    <!-- Navbar -->
+    <nav class="navbar">
+        <!-- Same Navbar as before -->
+        <ul class="nav-links">
+            <li><a onclick="scrollToSection('explore')">Explore</a></li>
+            <li><a onclick="scrollToSection('upload')">Upload</a></li>
+        </ul>
+
+        <div class="logo">Art Expo</div>
+
+        <ul class="nav-links">
+            <li><a href="#contact">Contact</a></li>
+            <li><a href="#about">About</a></li>
+        </ul>
+
+        <div class="hamburger" onclick="toggleMenu()">
+            <div></div>
+            <div></div>
+            <div></div>
+        </div>
+    </nav>
+
+    <!-- Body Content -->
+    <div class="content">
+        <!-- Section 1 -->
+        <section class="section bg1" id="explore">
+            <div class="content-box">
+                <h1>Welcome to Art Expo</h1>
+                <p>Discover unique pieces of art from around the world</p>
+                <a href="explore.html" class="section-button">Explore More</a> <!-- Link directly to explore.html -->
+            </div>
+        </section>
+
+        <!-- Section 2 -->
+        <section class="section bg2" id="upload">
+            <div class="content-box">
+                <h1>Upload Your Art</h1>
+                <p>Showcase your creativity and share with others</p>
+                <a href="upload.html" class="section-button">Start Uploading</a> <!-- Link directly to upload.html -->
+            </div>
+        </section>
+
+        <!-- Section 3 -->
+        <section class="section bg3" id="contact">
+            <div class="content-box">
+                <h1>Get in Touch</h1>
+                <p>Contact us for more information about the expo</p>
+                <a href="contact.html" class="section-button">Contact Us</a> <!-- Link directly to contact.html -->
+            </div>
+        </section>
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Art Expo. All Rights Reserved.</p>
+    </footer>
+
+    <script>
+        // Toggle Mobile Menu
+        function toggleMenu() {
+            const navLinks = document.querySelectorAll('.nav-links');
+            navLinks.forEach(link => link.classList.toggle('active'));
+        }
+
+        // Initial setup based on user authentication status
+        document.addEventListener('DOMContentLoaded', function () {
+            const isSignedUp = localStorage.getItem('isSignedUp') === 'true';
+
+            if (isSignedUp) {
+                // Enable links if user is signed up
+                document.getElementById('explore-link').href = 'explore.html';
+                document.getElementById('upload-link').href = 'upload.html';
+                document.getElementById('contact-link').href = 'contact.html';
+
+                document.querySelectorAll('.section-button').forEach(button => {
+                    const href = button.getAttribute('data-href');
+                    if (href) {
+                        button.href = href;
+                    }
+                });
+            } else {
+                // Disable links if user is not signed up
+                document.getElementById('explore-link').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.location.href = 'signup.html';
+                });
+
+                document.getElementById('upload-link').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.location.href = 'signup.html';
+                });
+
+                document.getElementById('contact-link').addEventListener('click', function (e) {
+                    e.preventDefault();
+                    window.location.href = 'signup.html';
+                });
+
+                // Ensure the buttons redirect to signup.html
+                document.querySelectorAll('.section-button').forEach(button => {
+                    button.setAttribute('data-href', button.href);
+                    button.href = 'signup.html';
+                });
+            }
+        });
+
+        // Check if section is in view and apply the slide-up animation
+        function checkSectionInView() {
+            const sections = document.querySelectorAll('.section');
+
+            sections.forEach(section => {
+                const rect = section.getBoundingClientRect();
+                const inView = rect.top < window.innerHeight && rect.bottom >= 0;
+
+                if (inView) {
+                    section.classList.add('in-view');
+                }
+            });
+        }
+
+        function initiateScrollEffect(sectionId) {
+            // Optional: add any delay or visual effect here before scrolling
+            setTimeout(function () {
+                scrollToSection(sectionId);
+            }, 300); // Delay of 300ms before the scroll begins
+        }
+
+        // Scroll to Section with Smooth Animation
+        function scrollToSection(sectionId) {
+            const section = document.getElementById(sectionId);
+            const targetPosition = section.getBoundingClientRect().top + window.scrollY - 60; // Offset for navbar
+            let currentPosition = window.scrollY;
+            const distance = targetPosition - currentPosition;
+            const duration = 1000; // Scrolling duration in milliseconds
+            const step = distance / (duration / 15); // Calculate step size based on duration
+
+            // Custom smooth scroll using interval
+            const scrollInterval = setInterval(() => {
+                currentPosition += step;
+                window.scrollTo(0, currentPosition);
+
+                if (Math.abs(targetPosition - currentPosition) < Math.abs(step)) {
+                    // Stop when close to the target position
+                    window.scrollTo(0, targetPosition);
+                    clearInterval(scrollInterval);
+                }
+            }, 15); // Execute every 15 milliseconds for smooth effect
+        }
+        window.addEventListener('scroll', checkSectionInView);
+        window.addEventListener('load', checkSectionInView);
+    </script>
+</body>
+
+</html>

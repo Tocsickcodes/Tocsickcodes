@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign Up</title>
+    <style>
+        /* Basic reset and styling */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+        }
+
+        .signup-container {
+            background-color: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 0 15px rgba(0, 0, 0, 0.1);
+            max-width: 400px;
+            width: 100%;
+        }
+
+        .signup-container h2 {
+            text-align: center;
+            margin-bottom: 20px;
+            color: #333;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        .form-group input:focus {
+            border-color: #007bff;
+            outline: none;
+        }
+
+        .form-group button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            font-size: 16px;
+            cursor: pointer;
+        }
+
+        .form-group button:hover {
+            background-color: #0056b3;
+        }
+
+        .error-message {
+            color: red;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none;
+        }
+
+        .success-message {
+            color: green;
+            font-size: 14px;
+            margin-bottom: 10px;
+            display: none;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div class="signup-container">
+        <h2>Sign Up</h2>
+
+        <form id="signup-form">
+            <div class="form-group">
+                <label for="name">Name</label>
+                <input type="text" id="name" placeholder="Enter your name" required>
+                <span class="error-message" id="name-error">Please enter your name</span>
+            </div>
+
+            <div class="form-group">
+                <label for="email">Email</label>
+                <input type="email" id="email" placeholder="Enter your email" required>
+                <span class="error-message" id="email-error">Please enter a valid email</span>
+            </div>
+
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" placeholder="Enter your password" required>
+                <span class="error-message" id="password-error">Password must be at least 6 characters long</span>
+            </div>
+
+            <div class="form-group">
+                <button type="submit">Sign Up</button>
+            </div>
+
+            <div class="success-message" id="success-message">Sign Up Successful!</div>
+        </form>
+    </div>
+
+    <script>
+        // Handle form validation and submission
+        document.getElementById('signup-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            // Assume successful signup
+            localStorage.setItem('isSignedUp', 'true');
+            window.location.href = 'index-signed-in.html'; // Redirect to homepage
+        });
+
+            // Clear previous error messages
+            document.querySelectorAll('.error-message').forEach(el => el.style.display = 'none');
+
+            const name = document.getElementById('name').value.trim();
+            const email = document.getElementById('email').value.trim();
+            const password = document.getElementById('password').value.trim();
+
+            let isValid = true;
+
+            // Validate name
+            if (!name) {
+                document.getElementById('name-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate email
+            const emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+            if (!emailPattern.test(email)) {
+                document.getElementById('email-error').style.display = 'block';
+                isValid = false;
+            }
+
+            // Validate password
+            if (password.length < 6) {
+                document.getElementById('password-error').style.display = 'block';
+                isValid = false;
+            }
+
+            if (isValid) {
+                // Simulate the signup process (replace this with real signup logic)
+                fakeSignup(email, password)
+                    .then(() => {
+                        // Mark the user as signed up in localStorage
+                        localStorage.setItem('isSignedUp', 'true');
+                        handleSignupSuccess();
+                    })
+                    .catch(error => {
+                        // Handle any signup errors
+                        alert('Signup failed: ' + error.message);
+                    });
+            }
+        
+
+        // Dummy signup function (replace with real signup logic)
+        function fakeSignup(email, password) {
+            return new Promise((resolve, reject) => {
+                setTimeout(() => {
+                    // Simulate a successful signup
+                    resolve();
+                }, 1000);
+            });
+        }
+
+        // After a successful signup, redirect to the homepage
+        function handleSignupSuccess() {
+            document.getElementById('success-message').style.display = 'block';
+            setTimeout(() => {
+                window.location.href = 'index-signed-in.html'; // Redirect to homepage after signup
+            }, 1000); // Delay for showing success message
+        }
+    </script>
+
+</body>
+
+</html>
